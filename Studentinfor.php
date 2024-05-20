@@ -95,8 +95,7 @@ $(function() {
             <div class="row g-4">
                 <div class="col-12">
                     <div class="bg-light rounded h-100 p-4">
-                        <h4 class="mb-4 text-primary text-decoration-underline text-center">TABLE STUDENTS LIST
-                            INFORMATION</h4>
+                        <h6 class="mb-4">Student Information</h6>
                         <div class="m-n2">
                             <button type="button" id="CreateNew" class="btn btn-primary m-3" data-bs-toggle="modal"
                                 data-bs-target="#studentModal">Create New</button>

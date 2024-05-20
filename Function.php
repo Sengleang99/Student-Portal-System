@@ -27,8 +27,12 @@
             $Profile = rand(1,9999).'-'. $_FILES['Photo']['name'];
             $part = "image/".$Profile;
             move_uploaded_file($_FILES['Photo']['tmp_name'],$part);
-                $sql = "INSERT INTO `tblstudentinfo` (`NameInLatin`,`NameInKhmer`,`GivenName`, `FamilyName`, `SexID`, `IDPassportNo`, `NationalityID`, `CountryID`, `DOB`,`POB`,`PhoneNumber`, `Email`, `CurrentAddress`, `CurrentAddressPP`, `Photo`, `RegisterDate`) 
-                VALUES ('$NameLatin','$NameInKhmer','$FamilyName','$GivenName','$Gender','$Passport','$Nationality','$Country','$DOB','$POB','$PhoneNumber','$Email','$CurrentAdress','$CurrentAdressPP','$Profile','$RegisterDate')";
+                $sql = "INSERT INTO `tblstudentinfo` (`NameInLatin`,`NameInKhmer`,`GivenName`, `FamilyName`,
+                `SexID`, `IDPassportNo`, `NationalityID`, `CountryID`, `DOB`,`POB`,`PhoneNumber`, `Email`,
+                `CurrentAddress`, `CurrentAddressPP`, `Photo`, `RegisterDate`) 
+                VALUES ('$NameLatin','$NameInKhmer','$FamilyName','$GivenName','$Gender','$Passport',
+                '$Nationality','$Country','$DOB','$POB','$PhoneNumber','$Email','$CurrentAdress',
+                '$CurrentAdressPP','$Profile','$RegisterDate')";
                 $rs = $cn->query($sql);
                 if($rs){
                     echo '
@@ -67,7 +71,11 @@
             $DOB = $_POST['DOB'];
             $POB = $_POST['POB'];
             $RegisterDate = $_POST['RegisterDate'];
-            $sql = "UPDATE `tblstudentinfo` SET `NameInKhmer`='$NameInKhmer',`NameInLatin`='$NameLatin',`FamilyName`='$FamilyName',`GivenName`='$GivenName',`SexID`='$Gender',`IDPassportNo`='$Passport',`NationalityID`='$Nationality',`CountryID`='$Country',`DOB`='$DOB',`POB`='$POB',`PhoneNumber`='$PhoneNumber',`Email`='$Email',`CurrentAddress`='$CurrentAdress',`CurrentAddressPP`='$CurrentAdressPP',`RegisterDate`='$RegisterDate' WHERE `StudentID`=$id";
+            $sql = "UPDATE `tblstudentinfo` SET `NameInKhmer`='$NameInKhmer',`NameInLatin`='$NameLatin',
+            `FamilyName`='$FamilyName',`GivenName`='$GivenName',`SexID`='$Gender',`IDPassportNo`='$Passport',
+            `NationalityID`='$Nationality',`CountryID`='$Country',`DOB`='$DOB',`POB`='$POB',
+            `PhoneNumber`='$PhoneNumber',`Email`='$Email',`CurrentAddress`='$CurrentAdress',
+            `CurrentAddressPP`='$CurrentAdressPP',`RegisterDate`='$RegisterDate' WHERE `StudentID`=$id";
             $rs = $cn->query($sql);
                 if($rs){
                     echo '

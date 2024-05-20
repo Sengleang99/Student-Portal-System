@@ -92,7 +92,7 @@ $(document).ready(function() {
             <div class="row g-4">
                 <div class="col-12">
                     <div class="bg-light rounded h-100 p-4">
-                        <h4 class="mb-4 text-primary text-decoration-underline text-center">TABLE LIST SUBJECT</h4>
+                        <h6 class="mb-4">Table Subject</h6>
                         <div class="m-n2">
                             <button type="button" id="Create_Subject" class="btn btn-primary m-3" data-bs-toggle="modal"
                                 data-bs-target="#subjectModal">Create New</button>
