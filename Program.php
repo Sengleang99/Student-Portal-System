@@ -1,5 +1,79 @@
+<?php include("Function.php") ?>
 <?php include("Header.php") ?>
+<script>
+$(document).ready(function() {
+    $('#tblprogram').on('click', '#EditProgram', function() {
+        $('#Edit_Program').show();
+        $('#Add_Program').hide();
+        $('#programModal').modal('show');
+        var current_row = $(this).closest('tr');
+        var ProgramID = current_row.find('td').eq(0).text();
+        var Year = current_row.find('td').eq(1).data('year-id');
+        var Semester = current_row.find('td').eq(2).data('semester-id');
+        var Shift = current_row.find('td').eq(3).data('shift-id');
+        var Degrees = current_row.find('td').eq(4).data('degree-id');
+        var AcademicYear = current_row.find('td').eq(5).data('academicyear-id');
+        var Major = current_row.find('td').eq(6).data('major-id');
+        var Batch = current_row.find('td').eq(7).data('batch-id');
+        var Campus = current_row.find('td').eq(8).data('campus-id');
+        var StartDate = current_row.find('td').eq(9).text();
+        var EndDate = current_row.find('td').eq(10).text();
+        var DateIssue = current_row.find('td').eq(11).text();
+        $('#ProgramID').val(ProgramID);
+        $('#Year').val(Year);
+        $('#Semester').val(Semester);
+        $('#Shift').val(Shift);
+        $('#Semester').val(Semester);
+        $('#Degrees').val(Degrees);
+        $('#AcademicYear').val(AcademicYear);
+        $('#Major').val(Major);
+        $('#Batch').val(Batch);
+        $('#Campus').val(Campus);
+        $('#StartDate').val(StartDate);
+        $('#EndDate').val(EndDate);
+        $('#DateIssue').val(DateIssue);
+    });
+    $('#Create_Program').click(function() {
+        $('#Edit_Program').hide();
+        $('#Add_Program').show();
+        $('#ProgramID').val('');
+        $('#Year').val('');
+        $('#Semester').val('');
+        $('#Shift').val('');
+        $('#Semester').val('');
+        $('#Degrees').val('');
+        $('#AcademicYear').val('');
+        $('#Major').val('');
+        $('#Batch').val('');
+        $('#Campus').val('');
+        $('#StartDate').val('');
+        $('#EndDate').val('');
+        $('#DateIssue').val('');
+    });
+    $('#Searching').on('keyup', function() {
+        var value = $(this).val().toLowerCase();
+        $('#Table_Program tr').filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+});
 
+function deleteProgram(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'Program.php?Remove_Program=' + id;
+        }
+    });
+}
+</script>
 <div class="container-xxl position-relative bg-white d-flex p-0">
     <!-- Spinner Start -->
     <div id="spinner"
@@ -24,121 +98,186 @@
             <div class="row g-4">
                 <div class="col-12">
                     <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Program Study</h6>
+                        <h6 class="mb-4">PROGRAM INFORMATION LISTS</h6>
                         <div class="m-n2">
-                            <button type="button" class="btn btn-primary m-3" data-bs-toggle="modal"
+                            <button type="button" id="Create_Program" class="btn btn-primary m-3" data-bs-toggle="modal"
                                 data-bs-target="#programModal">Create New</button>
                         </div>
                         <div class="modal fade" id="programModal" tabindex="-1">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Form Create Program</h5>
-                                        <div class="modal-footer">
-                                            <button type="submit" name="btn-save" class="btn btn-primary">Save</button>
-                                            <button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-
-                                        </div>
-                                    </div>
                                     <div class="modal-body">
                                         <form method="POST" enctype="multipart/form-data">
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    <select name="Year" class="form-select mb-3"
-                                                        aria-label="Default select example">
-                                                        <option selected>Year</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-4">
-                                                    <select name="Semester" class="form-select mb-3"
-                                                        aria-label="Default select example">
-                                                        <option selected>Semester</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-4">
-                                                    <select name="Shift" class="form-select mb-3"
-                                                        aria-label="Default select example">
-                                                        <option selected>Shift</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-4">
-                                                    <select name="Degrees" class="form-select mb-3"
-                                                        aria-label="Default select example">
-                                                        <option selected>Degrees</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-4">
-                                                    <select name="AcademicYear" class="form-select mb-3"
-                                                        aria-label="Default select example">
-                                                        <option selected>AcademicYear</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-4">
-                                                    <select name="Major" class="form-select mb-3"
-                                                        aria-label="Default select example">
-                                                        <option selected>Major</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-6">
-                                                    <select name="Batch" class="form-select mb-3"
-                                                        aria-label="Default select example">
-                                                        <option selected>Batch</option>
-                                                        <option value="1">One</option>
-                                                        <option value="2">Two</option>
-                                                        <option value="3">Three</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-6">
-                                                    <select name="Campus" class="form-select mb-3"
-                                                        aria-label="Default select example">
-                                                        <option selected>Campus</option>
-                                                        <option value="1">BELTEI International University(Toul Slaeng)
-                                                        </option>
-                                                        <option value="2">BELTEI International University(Chom Chav)
-                                                        </option>
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Form Create Program</h5>
+                                            </div>
 
+                                            <div class="row">
+                                                <div class="col-12">
+
+                                                    <input name="ProgramID" hidden id="ProgramID"
+                                                        class="form-control mb-3" type="number">
+                                                </div>
+                                                <div class="col-4">
+                                                    <select id="Year" name="Year" class="form-select mb-3"
+                                                        aria-label="Default select example">
+                                                        <option value="">Select Year</option>
+                                                        <?php 
+                                                            $sql = "SELECT * FROM `tblyear`";
+                                                            $rs = $cn->query($sql);
+                                                        while($row = $rs->fetch_assoc()){
+                                                            ?>
+                                                        <option value="<?php echo $row['YearID'] ?>">
+                                                            <?php echo $row['YearEN'] ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-4">
+                                                    <select id="Semester" name="Semester" class="form-select mb-3"
+                                                        aria-label="Default select example">
+                                                        <option value="">Select Semester</option>
+                                                        <?php 
+                                                            $sql = "SELECT * FROM `tblsemester`";
+                                                            $rs = $cn->query($sql);
+                                                        while($row = $rs->fetch_assoc()){
+                                                            ?>
+                                                        <option value="<?php echo $row['SemesterID'] ?>">
+                                                            <?php echo $row['SemesterEN'] ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-4">
+                                                    <select name="Shift" id="Shift" class="form-select mb-3"
+                                                        aria-label="Default select example">
+                                                        <option value="">Select Shift</option>
+                                                        <?php 
+                                                            $sql = "SELECT * FROM `tblshift`";
+                                                            $rs = $cn->query($sql);
+                                                        while($row = $rs->fetch_assoc()){
+                                                            ?>
+                                                        <option value="<?php echo $row['ShiftID'] ?>">
+                                                            <?php echo $row['ShiftEN'] ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-4">
+                                                    <select name="Degrees" id="Degrees" class="form-select mb-3"
+                                                        aria-label="Default select example">
+                                                        <option value="">Select Degrees</option>
+                                                        <?php 
+                                                            $sql = "SELECT * FROM `tbldegree`";
+                                                            $rs = $cn->query($sql);
+                                                        while($row = $rs->fetch_assoc()){
+                                                            ?>
+                                                        <option value="<?php echo $row['DegreeID'] ?>">
+                                                            <?php echo $row['DegreeNameEN'] ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-4">
+                                                    <select name="AcademicYear" id="AcademicYear"
+                                                        class="form-select mb-3" aria-label="Default select example">
+                                                        <option value="">Select AcademicYear</option>
+                                                        <?php 
+                                                            $sql = "SELECT * FROM `tblacademicyear`";
+                                                            $rs = $cn->query($sql);
+                                                        while($row = $rs->fetch_assoc()){
+                                                            ?>
+                                                        <option value="<?php echo $row['AcademicYearID'] ?>">
+                                                            <?php echo $row['AcademicYear'] ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-4">
+                                                    <select id="Major" name="Major" class="form-select mb-3"
+                                                        aria-label="Default select example">
+                                                        <option value="">Select Major</option>
+                                                        <?php 
+                                                            $sql = "SELECT * FROM `tblmajor`";
+                                                            $rs = $cn->query($sql);
+                                                        while($row = $rs->fetch_assoc()){
+                                                            ?>
+                                                        <option value="<?php echo $row['MajorID'] ?>">
+                                                            <?php echo $row['MajorEN'] ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6">
+                                                    <select name="Batch" id="Batch" class="form-select mb-3"
+                                                        aria-label="Default select example">
+                                                        <option value="">Select Batch</option>
+                                                        <?php 
+                                                            $sql = "SELECT * FROM `tblbatch`";
+                                                            $rs = $cn->query($sql);
+                                                        while($row = $rs->fetch_assoc()){
+                                                            ?>
+                                                        <option value="<?php echo $row['BatchID'] ?>">
+                                                            <?php echo $row['BatchEN'] ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6">
+                                                    <select name="Campus" id="Campus" class="form-select mb-3"
+                                                        aria-label="Default select example">
+                                                        <option value="">Select Campus</option>
+                                                        <?php 
+                                                            $sql = "SELECT * FROM `tblcampus`";
+                                                            $rs = $cn->query($sql);
+                                                        while($row = $rs->fetch_assoc()){
+                                                            ?>
+                                                        <option value="<?php echo $row['CampusID'] ?>">
+                                                            <?php echo $row['CampusEN'] ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
                                                     </select>
                                                 </div>
                                                 <div class="col-4">
                                                     <label for="">Start Date</label>
-                                                    <input name="StartDate" class="form-control mb-3" type="date">
+                                                    <input name="StartDate" id="StartDate" class="form-control mb-3"
+                                                        type="date">
                                                 </div>
                                                 <div class="col-4">
                                                     <label for="">End Start</label>
-                                                    <input name="EndStart" class="form-control mb-3" type="date">
+                                                    <input name="EndStart" id="EndDate" class="form-control mb-3"
+                                                        type="date">
                                                 </div>
                                                 <div class="col-4">
                                                     <label for="">Date Issue</label>
-                                                    <input name="DateIssue" class="form-control mb-3" type="date">
+                                                    <input name="DateIssue" id="DateIssue" class="form-control mb-3"
+                                                        type="date">
                                                 </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" id="Add_Program" name="Add_Program"
+                                                    class="btn btn-primary">Save</button>
+                                                <button type="submit" id="Edit_Program" name="Edit_Program"
+                                                    class="btn btn-primary">Save
+                                                    Change</button>
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
                                             </div>
                                         </form>
                                     </div>
-
                                 </div>
                             </div>
                         </div><!-- End Large Modal-->
                         <div class="table-responsive">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" id="tblprogram">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
@@ -150,44 +289,14 @@
                                         <th scope="col">Major</th>
                                         <th scope="col">Batch</th>
                                         <th scope="col">Campus</th>
-                                        <th scope="col">Start-Date</th>
+                                        <!-- <th scope="col">Start-Date</th>
                                         <th scope="col">End-Date</th>
-                                        <th scope="col">Date-Issue</th>
+                                        <th scope="col">Date-Issue</th> -->
                                         <th scope="col">Active</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>First Year</td>
-                                        <td>Semester 1</td>
-                                        <td> Moring</td>
-                                        <td>Associate Degrees</td>
-                                        <td>2024-2025</td>
-                                        <td>Software Engineering</td>
-                                        <td>Batch 1</td>
-                                        <td>BIU1</td>
-                                        <td>09-09-2020</td>
-                                        <td>09-09-2021</td>
-                                        <td>09-09-2024</td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn" type="button" id="dropdownMenuButton"
-                                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="bi bi-three-dots-vertical"></i>
-                                                </button>
-                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-eye-fill"></i>
-                                                            View</a></li>
-                                                    <li><a class="dropdown-item" href="#"><i
-                                                                class="bi bi-pencil-fill"></i> Update</a></li>
-                                                    <li><a class="dropdown-item" href="#"><i
-                                                                class="bi bi-trash-fill"></i> Delete</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-
+                                <tbody id="Table_Program">
+                                    <?php getView_Program(); ?>
                                 </tbody>
                             </table>
                         </div>

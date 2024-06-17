@@ -1,5 +1,5 @@
+<?php include('Function.php') ?>
 <?php include("Header.php") ?>
-
 <div class="container-xxl position-relative bg-white d-flex p-0">
     <!-- Spinner Start -->
     <div id="spinner"
@@ -10,27 +10,23 @@
     </div>
     <!-- Spinner End -->
 
-
     <!-- Sidebar Start -->
     <?php include("Sidebar.php") ?>
-    <!-- Sidebar End -->
 
-    <!-- Content Start -->
     <div class="content">
         <!-- Navbar Start -->
         <?php include("Navbar.php") ?>
         <!-- Navbar End -->
 
-
-        <!-- Sale & Revenue Start -->
         <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
-                <div class="col-sm-6 col-xl-3">
+                <div class="col-sm-6 col-xl-3 col-lg-12">
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-line fa-3x text-primary"></i>
+                        <!-- <i class="fa fa-chart-line fa-3x text-primary"></i> -->
+                        <i class="fas fa-user-graduate fa-3x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Today Sale</p>
-                            <h6 class="mb-0">$1234</h6>
+                            <p class="mb-2">Total Student</p>
+                            <h6 class="mb-0">120</h6>
                         </div>
                     </div>
                 </div>
@@ -38,8 +34,8 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa fa-chart-bar fa-3x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Total Sale</p>
-                            <h6 class="mb-0">$1234</h6>
+                            <p class="mb-2">Total Grade</p>
+                            <h6 class="mb-0">111</h6>
                         </div>
                     </div>
                 </div>
@@ -47,8 +43,8 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa fa-chart-area fa-3x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Today Revenue</p>
-                            <h6 class="mb-0">$1234</h6>
+                            <p class="mb-2">Today Faculty</p>
+                            <h6 class="mb-0">12</h6>
                         </div>
                     </div>
                 </div>
@@ -56,8 +52,8 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa fa-chart-pie fa-3x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Total Revenue</p>
-                            <h6 class="mb-0">$1234</h6>
+                            <p class="mb-2">Total Major</p>
+                            <h6 class="mb-0">42</h6>
                         </div>
                     </div>
                 </div>
@@ -67,7 +63,7 @@
 
 
         <!-- Sales Chart Start -->
-        <div class="container-fluid pt-4 px-4">
+        <!-- <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
                 <div class="col-sm-12 col-xl-6">
                     <div class="bg-light text-center rounded p-4">
@@ -88,12 +84,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- Sales Chart End -->
 
 
         <!-- Recent Sales Start -->
-        <div class="container-fluid pt-4 px-4">
+        <!-- <div class="container-fluid pt-4 px-4">
             <div class="bg-light text-center rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     <h6 class="mb-0">Recent Salse</h6>
@@ -162,12 +158,12 @@
                     </table>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- Recent Sales End -->
 
 
         <!-- Widgets Start -->
-        <div class="container-fluid pt-4 px-4">
+        <!-- <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
                 <div class="col-sm-12 col-md-6 col-xl-4">
                     <div class="h-100 bg-light rounded p-4">
@@ -288,19 +284,14 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Widgets End -->
-
+        </div> -->
 
         <!-- Footer Start -->
         <?php include("Footer.php") ?>
         <!-- Footer End -->
     </div>
     <!-- Content End -->
-
-
     <!-- Back to Top -->
-    <a href="index.php" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
 </div>
-
 <?php include("Library_Javascript.php") ?>

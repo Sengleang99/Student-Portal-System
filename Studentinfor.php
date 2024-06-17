@@ -1,5 +1,5 @@
-<?php include("Header.php") ?>
-
+<?php include("Function.php") ?>
+<?php include ('Header.php') ?>
 <script>
 $(function() {
     $('#tblstudents').on('click', '#UpdateStudent', function() {
@@ -62,10 +62,26 @@ $(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
+
 });
+
+function deleteStudent(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'Studentinfor.php?Remove_Student=' + id;
+        }
+    });
+}
 </script>
 
-<?php include("Function.php") ?>
 
 <div class="container-xxl position-relative bg-white d-flex p-0">
     <!-- Spinner Start -->
@@ -76,26 +92,17 @@ $(function() {
         </div>
     </div>
     <!-- Spinner End -->
-
     <!-- Sidebar Start -->
     <?php include("Sidebar.php") ?>
-
     <div class="content">
         <!-- Navbar Start -->
         <?php include("Navbar.php") ?>
         <!-- Navbar End -->
-
-
-
-        <!-- Button trigger modal -->
-
-
-
         <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
                 <div class="col-12">
                     <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Student Information</h6>
+                        <h6 class="mb-4">STUDENT INFORMATION LISTS</h6>
                         <div class="m-n2">
                             <button type="button" id="CreateNew" class="btn btn-primary m-3" data-bs-toggle="modal"
                                 data-bs-target="#studentModal">Create New</button>
@@ -174,7 +181,6 @@ $(function() {
                                                         aria-label="Default select example">
                                                         <option value="">Gender</option>
                                                         <?php 
-                                                            $cn= new mysqli("localhost","root","","student_portal_management");
                                                             $sql = "SELECT * FROM `tblsex`";
                                                             $rs = $cn->query($sql);
                                                         while($row = $rs->fetch_assoc()){
@@ -188,11 +194,10 @@ $(function() {
                                                     </select>
                                                 </div>
                                                 <div class="col-4">
-                                                    <select id="Country" name="Country" class="form-select mb-3"
+                                                    <select id="Nationality" name="Nationality" class="form-select mb-3"
                                                         aria-label="Default select example">
-                                                        <option value="">Country</option>
+                                                        <option value="">Nationality</option>
                                                         <?php 
-                                                            $cn= new mysqli("localhost","root","","student_portal_management");
                                                             $sql = "SELECT * FROM `tblnationality`";
                                                             $rs = $cn->query($sql);
                                                         while($row = $rs->fetch_assoc()){
@@ -205,11 +210,10 @@ $(function() {
                                                     </select>
                                                 </div>
                                                 <div class="col-4">
-                                                    <select id="Nationality" name="Nationality" class="form-select mb-3"
+                                                    <select id="Country" name="Country" class="form-select mb-3"
                                                         aria-label="Default select example">
                                                         <option value="">Country</option>
                                                         <?php 
-                                                            $cn= new mysqli("localhost","root","","student_portal_management");
                                                             $sql = "SELECT * FROM `tblcountry`";
                                                             $rs = $cn->query($sql);
                                                         while($row = $rs->fetch_assoc()){
@@ -269,7 +273,74 @@ $(function() {
                                     </tr>
                                 </thead>
                                 <tbody id="Tble_Student">
-                                    <?php Getview_Student() ?>
+                                    <?php
+                                          global $cn;
+                                          $sql = "SELECT 
+                                          tblstudentinfo.StudentID,
+                                          tblstudentinfo.NameInLatin,
+                                          tblstudentinfo.NameInKhmer,
+                                          tblstudentinfo.Email, 
+                                          tblstudentinfo.PhoneNumber, 
+                                          tblstudentinfo.DOB,tblstudentinfo.POB,
+                                          tblstudentinfo.CurrentAddress, 
+                                          tblstudentinfo.CurrentAddressPP, 
+                                          tblsex.SexEN,tblcountry.CountryEN, 
+                                          tblnationality.NationalityEN,
+                                          tblsex.SexID,tblstudentinfo.RegisterDate,
+                                          tblstudentinfo.Photo,tblcountry.CountryID,
+                                          tblnationality.NationalityID
+                                          FROM tblstudentinfo
+                                              INNER JOIN tblsex ON tblstudentinfo.SexID = tblsex.SexID
+                                              INNER JOIN tblcountry ON tblstudentinfo.CountryID = tblcountry.CountryID
+                                              INNER JOIN tblnationality ON tblstudentinfo.NationalityID = tblnationality.NationalityID";
+                                              $rs = $cn->query($sql);
+                                              if($rs){
+                                                  while($row = $rs->fetch_assoc()){
+                                                      $id = $row['StudentID'];
+                                                      ?>
+                                    <tr>
+                                        <td><?php echo $row['StudentID']; ?></td>
+                                        <td hidden><?php echo $row['NameInKhmer']; ?></td>
+                                        <td><?php echo $row['NameInLatin']; ?></td>
+                                        <td data-gender-id="<?php echo $row['SexID']; ?>"><?php echo $row['SexEN']; ?>
+                                        </td>
+                                        <td><?php echo $row['PhoneNumber']; ?></td>
+                                        <td><?php echo $row['Email']; ?></td>
+                                        <td><?php echo $row['CurrentAddress']; ?></td>
+                                        <td hidden><?php echo $row['CurrentAddressPP']; ?></td>
+                                        <td hidden><?php echo $row['DOB']; ?></td>
+                                        <td hidden><?php echo $row['POB']; ?></td>
+                                        <td hidden data-country-id="<?php echo $row['CountryID']; ?>">
+                                            <?php echo $row['CountryEN']; ?></td>
+                                        <td hidden data-nationality-id="<?php echo $row['NationalityID']; ?>">
+                                            <?php echo $row['NationalityEN']; ?></td>
+                                        <td hidden><?php echo $row['RegisterDate']; ?></td>
+                                        <td hidden><?php echo $row['Photo']; ?></td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn" type="button" id="dropdownMenuButton"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bi bi-three-dots-vertical"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                    <li><a class="dropdown-item"
+                                                            href="ViewDetail.php?Get_Detail=<?php echo $id; ?>"><i
+                                                                class="bi bi-eye-fill"></i> View</a></li>
+                                                    <li><a class="dropdown-item" id="UpdateStudent" href="#"
+                                                            data-bs-toggle="modal" data-bs-target="#studentModal"><i
+                                                                class="bi bi-pencil-fill"></i> Update</a></li>
+                                                    <li><a type="button" class="dropdown-item" href="#"
+                                                            onclick="deleteStudent(<?php $row['StudentID'] ?>)"><i
+                                                                class="bi bi-trash-fill"></i> Delete</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <?php
+                                                  }
+                                              }
+                                              ?>
+
                                 </tbody>
                             </table>
                         </div>

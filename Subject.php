@@ -1,12 +1,13 @@
-<?php include("Header.php") ?>
 <?php include('Function.php') ?>
+<?php include("Header.php") ?>
+
 <script>
 $(document).ready(function() {
     $('#Faculty').change(function() {
         var FacultyID = $('#Faculty').val();
         $.ajax({
             type: 'POST',
-            url: 'Function.php',
+            url: 'FetchData.php',
             data: {
                 id: FacultyID
             },
@@ -67,7 +68,24 @@ $(document).ready(function() {
         });
     });
 });
+
+function deleteSubject(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'Subject.php?Remove_Subject=' + id;
+        }
+    });
+}
 </script>
+
 
 <div class="container-xxl position-relative bg-white d-flex p-0">
     <!-- Spinner Start -->
@@ -92,7 +110,7 @@ $(document).ready(function() {
             <div class="row g-4">
                 <div class="col-12">
                     <div class="bg-light rounded h-100 p-4">
-                        <h6 class="mb-4">Table Subject</h6>
+                        <h6 class="mb-4">SUBJECTS INFORMATION LISTS</h6>
                         <div class="m-n2">
                             <button type="button" id="Create_Subject" class="btn btn-primary m-3" data-bs-toggle="modal"
                                 data-bs-target="#subjectModal">Create New</button>
@@ -136,7 +154,6 @@ $(document).ready(function() {
                                                         aria-label="Default select example">
                                                         <option value="">Select Faculty</option>
                                                         <?php 
-                                                            $cn= new mysqli("localhost","root","","student_portal_management");
                                                             $sql = "SELECT * FROM `tblfaculty`";
                                                             $rs = $cn->query($sql);
                                                         while($row = $rs->fetch_assoc()){
@@ -153,7 +170,7 @@ $(document).ready(function() {
                                                         aria-label="Default select example">
                                                         <option value="">Select Semester</option>
                                                         <?php 
-                                                            $cn= new mysqli("localhost","root","","student_portal_management");
+        
                                                             $sql = "SELECT * FROM `tblsemester`";
                                                             $rs = $cn->query($sql);
                                                         while($row = $rs->fetch_assoc()){
@@ -170,7 +187,7 @@ $(document).ready(function() {
                                                         aria-label="Default select example">
                                                         <option value="">Select Year</option>
                                                         <?php 
-                                                            $cn= new mysqli("localhost","root","","student_portal_management");
+        
                                                             $sql = "SELECT * FROM `tblyear`";
                                                             $rs = $cn->query($sql);
                                                         while($row = $rs->fetch_assoc()){
@@ -188,13 +205,13 @@ $(document).ready(function() {
                                                         aria-label="Default select example">
                                                         <option value="">Select Major</option>
                                                         <?php 
-                                                            $cn= new mysqli("localhost","root","","student_portal_management");
-                                                            $sql = "SELECT * FROM `tblsemester`";
+        
+                                                            $sql = "SELECT * FROM `tblmajor`";
                                                             $rs = $cn->query($sql);
                                                         while($row = $rs->fetch_assoc()){
                                                             ?>
-                                                        <option value="<?php echo $row['SemesterID'] ?>">
-                                                            <?php echo $row['SemesterEN'] ?></option>
+                                                        <option value="<?php echo $row['MajorID'] ?>">
+                                                            <?php echo $row['MajorEN'] ?></option>
                                                         <?php
                                                         }
                                                         ?>

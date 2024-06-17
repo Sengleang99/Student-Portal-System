@@ -5,7 +5,7 @@
     <a href="#" class="sidebar-toggler flex-shrink-0">
         <i class="fa fa-bars"></i>
     </a>
-    <form class="d-none d-md-flex ms-4">
+    <form class="d-none d-md-flex ms-4 align-items-center mt-3">
         <input id="Searching" class="form-control border-0" type="search" placeholder="Search">
     </form>
 </nav>

@@ -18,32 +18,32 @@
         </div>
         <div class="navbar-nav w-100">
             <a href="index.php" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-            <a href="Studentinfor.php" class="nav-item nav-link"> <i class="fas fa-user-graduate me-2"></i> Students</a>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
+                        class="fas fa-user-graduate me-2"></i>Student</a>
+                <div class="dropdown-menu bg-transparent border-0">
+                    <ul class="sidebar-nav">
+                        <li class="nav-item">
+                            <a href="Studentinfor.php" class="dropdown-item">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Background_Study.php" class="dropdown-item">Education</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="Familty_Student.php" class="dropdown-item">Family</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <a href="Subject.php" class="nav-item nav-link"><i class="bi bi-book me-2"></i>Subject</a>
             <a href="Program.php" class="nav-item nav-link">
                 <i class="bi bi-file-text me-2"></i>Program
             </a>
-
-            <!-- <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                        class="fa fa-laptop me-2"></i>Program</a>
-                <div class="dropdown-menu bg-transparent border-0">
-                    <ul class="sidebar-nav">
-                        <li class="nav-item">
-                            <a href="Subject.php" class="dropdown-item">Subject</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="Student_Status.php" class="dropdown-item">Student Status</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="Program.php" class="dropdown-item">Program</a>
-                        </li>
-                    </ul>
-                </div>
-            </div> -->
-
-            <a href="#" name="SignOut" type="submit" class="nav-item nav-link"><i
-                    class="bi bi-box-arrow-in-left"></i>SignOut</a>
+            <a href="Status.php" class="nav-item nav-link"><i class="bi bi-journal-check me-2"></i>Status</a>
+            <a href="Schedule.php" class="nav-item nav-link"><i class="bi bi-calendar4-week me-2"></i>Schedule</a>
+            <a href="Subject_Fail.php" class="nav-item nav-link"><i class="bi bi-calendar4-week me-2"></i>Subject
+                Fall</a>
         </div>
     </nav>
 </div>
+<?php include("Library_Javascript.php") ?>
