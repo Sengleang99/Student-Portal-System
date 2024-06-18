@@ -41,8 +41,8 @@
             </a>
             <a href="Status.php" class="nav-item nav-link"><i class="bi bi-journal-check me-2"></i>Status</a>
             <a href="Schedule.php" class="nav-item nav-link"><i class="bi bi-calendar4-week me-2"></i>Schedule</a>
-            <a href="Subject_Fail.php" class="nav-item nav-link"><i class="bi bi-calendar4-week me-2"></i>Subject
-                Fall</a>
+            <a href="Subject_Fail.php" class="nav-item nav-link"><i class="bi bi-arrow-down-circle me-2"></i>Fall
+                Subject</a>
         </div>
     </nav>
 </div>

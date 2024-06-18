@@ -1,6 +1,56 @@
 <?php include("Function.php"); ?>
 <?php include("Header.php"); ?>
+<?php 
+     if (isset($_POST['Add_Status'])) {
+        $Program = $_POST['Program'];
+        $AssignDate = $_POST['AssignDate'];
+        $Note = $_POST['Note'];
+    
+        // Check if students are selected
+        if (isset($_POST['assigned']) && is_array($_POST['assigned'])) {
+            $assignedStudents = $_POST['assigned'];
+    
+            foreach ($assignedStudents as $Student) {
+                $sql = "INSERT INTO tblstudentstatus (StudentID, ProgramID, Note, AssignDate) 
+                        VALUES ('$Student', '$Program', '$Note', '$AssignDate')";
+                $rs = $cn->query($sql);
+                
+                if (!$rs) {
+                    // Show error if insertion fails for any student
+                    echo "<script>
+                            Swal.fire('Error!', 'Failed to add student ID: $Student.', 'error');
+                          </script>";
+                    break; // Exit the loop on first error
+                }
+            }
+    
+            // Show success message if all insertions are successful
+            if ($rs) {
+                echo "<script>
+                        Swal.fire('Successful!', 'Students added successfully!', 'success');
+                      </script>";
+            }
+        } else {
+            // No students selected
+            echo "<script>
+                    Swal.fire('Error!', 'No students selected.', 'error');
+                  </script>";
+        }
+    }
 
+    if(isset($_GET['StudentStatusID']) && isset($_GET['Assigned'])){
+        $id = $_GET['StudentStatusID'];
+        $Assigned = $_GET['Assigned'];
+        $sql ="UPDATE `tblstudentstatus` SET Assigned=$Assigned WHERE StudentStatusID=$id";
+        $rs = $cn->query($sql);
+    }
+
+       if(isset($_GET['Remove_Status'])){
+            $id = $_GET['Remove_Status'];
+            $sql ="DELETE FROM `tblstudentstatus` WHERE StudentStatusID=$id";
+            $rs = $cn->query($sql);
+        }
+?>
 <script>
 function deleteStatus(id) {
     Swal.fire({
@@ -61,7 +111,16 @@ function deleteStatus(id) {
                                             INNER JOIN tblyear ON tblprogram.YearID = tblyear.YearID";
                                             $rs = $cn->query($sql);
                                             while ($row = $rs->fetch_assoc()) {
-                                                echo '<option value="' . $row['ProgramID'] . '">' . $row['MajorEN'] . '/' . $row['YearEN'] . '/' . $row['SemesterEN'] . '/' . $row['ShiftEN'] . $row['SemesterEN'] . '/' . $row['BatchEN'] .'</option>';
+                                                echo 
+                                                '<option value="' 
+                                                . $row['ProgramID'] . '">' 
+                                                . $row['MajorEN'] . '/' 
+                                                . $row['YearEN'] . '/' 
+                                                . $row['SemesterEN'] . '/' 
+                                                . $row['ShiftEN'] 
+                                                . $row['SemesterEN'] . '/' 
+                                                . $row['BatchEN'] .
+                                                '</option>';
                                             }
                                         ?>
                                     </select>
@@ -87,7 +146,7 @@ function deleteStatus(id) {
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th scope="col">#</th>
+                                            <th scope="col">Id</th>
                                             <th scope="col">Student</th>
                                             <th scope="col">Assign</th>
                                         </tr>
@@ -100,7 +159,7 @@ function deleteStatus(id) {
                                                     LEFT JOIN tblstudentstatus stt ON st.StudentID = stt.StudentID
                                                     WHERE stt.StudentID IS NULL";
                                             $rs = $cn->query($sql);
-                                            if ($rs) {
+                                            if ($rs->num_rows>0) {
                                                 while ($row = $rs->fetch_assoc()) {
                                                     echo "<tr>";
                                                     echo "<td>{$row['StudentID']}</td>";
@@ -147,7 +206,7 @@ function deleteStatus(id) {
                                     JOIN tblstudentinfo st ON stt.StudentID = st.StudentID
                                     JOIN tblmajor m ON p.MajorID = m.MajorID";
                                 $rs = $cn->query($sql);
-                                if ($rs) {
+                                if ($rs->num_rows>0) {
                                     while ($row = $rs->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<td>{$row['StudentStatusID']}</td>";

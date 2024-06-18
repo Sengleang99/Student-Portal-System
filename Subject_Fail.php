@@ -1,23 +1,33 @@
 <?php include("Function.php"); ?>
 <?php include("Header.php"); ?>
-<?php include("FetchData.php"); ?>
+
 
 <script>
 $(function() {
     $('#Program').change(function() {
         var ProgramID = $(this).val();
-        $.ajax({
-            type: 'POST',
-            url: 'FetchData.php',
-            data: {
-                id: ProgramID
-            },
-            success: function(data) {
-                var response = JSON.parse(data);
-                $('#Table_Status').html(response.students);
-                $('#Lecturer_Status').html(response.lecturers);
-            }
-        });
+        alert(ProgramID)
+        if (ProgramID) {
+            $.ajax({
+                type: 'POST',
+                url: 'FetchData.php',
+                data: {
+                    id: ProgramID
+                },
+                success: function(data) {
+                    if (data.success) {
+                        $('#Table_Status').html(data.students); // Populate students table
+                        $('#Lecturer_Status').html(data.lecturers);
+                    } else {
+                        $('#Table_Status').html(
+                            '<tr><td colspan="3">No students found</td></tr>');
+                        $('#Lecturer_Status').html(
+                            '<tr><td colspan="3">No lecturers found</td></tr>');
+                    }
+                },
+
+            });
+        }
     });
 });
 </script>
