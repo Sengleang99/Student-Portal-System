@@ -1,76 +1,5 @@
 <?php include("Function.php") ?>
 <?php include ('Header.php') ?>
-<script>
-$(function() {
-    $('#tblschedule').on('click', '#UpdateSchedule', function() {
-        $('#Edit_Schedule').show();
-        $('#Add_Schedule').hide();
-        var current_row = $(this).closest('tr');
-        var id = current_row.find('td').eq(0).text();
-        var Subject = current_row.find('td').eq(1).data('subject-id');
-        var Lecturer = current_row.find('td').eq(2).data('lecturer-id');
-        var Week = current_row.find('td').eq(3).data('week-id');
-        var Time = current_row.find('td').eq(4).data('time-id');
-        var Room = current_row.find('td').eq(5).data('room-id');
-        var Program = current_row.find('td').eq(6).data('program-id');
-        var StartDate = current_row.find('td').eq(7).text();
-        var EndDate = current_row.find('td').eq(8).text();
-        var ScheduleDate = current_row.find('td').eq(9).text();
-        $('#id').val(id);
-        $('#Subject').val(Subejct);
-        $('#Lecturer').val(Lecturer);
-        $('#Week').val(Week);
-        $('#Time').val(Time);
-        $('#Room').val(Room);
-        $('#Program').val(Program);
-        $('#StartDate').val(StartDate);
-        $('#EndDate').val(EndDate);
-        $('#ScheduleDate').val(EnScheduleDatedDate);
-
-        $('#scheduleModal').modal('show');
-        $("#btn-close").click();
-    });
-    $('#CreateNew').click(function() {
-        $('#Edit_Schedule').hide();
-        $('#Add_Schedule').show();
-        $('#id').val('');
-        $('#Subject').val('');
-        $('#Lecturer').val('');
-        $('#Week').val('');
-        $('#Time').val('');
-        $('#Room').val('');
-        $('#Program').val('');
-        $('#StartDate').val('');
-        $('#EndDate').val('');
-        $('#ScheduleDate').val('');
-    });
-    $('#Searching').on('keyup', function() {
-        var value = $(this).val().toLowerCase();
-        $('#Tble_Student tr').filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
-    });
-
-});
-
-function deleteSchedule(id) {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            window.location.href = 'Schedule.php?Remove_Schedule=' + id;
-        }
-    });
-}
-</script>
-
-
 <?php 
     if(isset($_POST['Add_Schedule'])){
         $Subject = $_POST['Subject'];
@@ -152,6 +81,88 @@ function deleteSchedule(id) {
         }
     }
 ?>
+<script>
+$(function() {
+    $('#tblschedule').on('click', '#UpdateSchedule', function() {
+        $('#Edit_Schedule').show();
+        $('#Add_Schedule').hide();
+        var current_row = $(this).closest('tr');
+        var id = current_row.find('td').eq(0).text();
+        var Subject = current_row.find('td').eq(1).data('subject-id');
+        var Lecturer = current_row.find('td').eq(2).data('lecturer-id');
+        var Week = current_row.find('td').eq(3).data('week-id');
+        var Time = current_row.find('td').eq(4).data('time-id');
+        var Room = current_row.find('td').eq(5).data('room-id');
+        var Program = current_row.find('td').eq(6).data('program-id');
+        var StartDate = current_row.find('td').eq(7).text();
+        var EndDate = current_row.find('td').eq(8).text();
+        var ScheduleDate = current_row.find('td').eq(9).text();
+        $('#id').val(id);
+        $('#Subject').val(Subejct);
+        $('#Lecturer').val(Lecturer);
+        $('#Week').val(Week);
+        $('#Time').val(Time);
+        $('#Room').val(Room);
+        $('#Program').val(Program);
+        $('#StartDate').val(StartDate);
+        $('#EndDate').val(EndDate);
+        $('#ScheduleDate').val(EnScheduleDatedDate);
+        $('#scheduleModal').modal('show');
+        $("#btn-close").click();
+    });
+    $('#CreateNew').click(function() {
+        $('#Edit_Schedule').hide();
+        $('#Add_Schedule').show();
+        $('#id').val('');
+        $('#Subject').val('');
+        $('#Lecturer').val('');
+        $('#Week').val('');
+        $('#Time').val('');
+        $('#Room').val('');
+        $('#Program').val('');
+        $('#StartDate').val('');
+        $('#EndDate').val('');
+        $('#ScheduleDate').val('');
+    });
+    $('#Searching').on('keyup', function() {
+        var value = $(this).val().toLowerCase();
+        $('#Tble_Student tr').filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+
+});
+
+function deleteSchedule(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'Schedule.php?Remove_Schedule=' + id;
+        }
+    });
+}
+
+$('#Filter_Program').change(function() {
+    var programId = $(this).val();
+    $.ajax({
+        url: 'Schedule.php', // Create a new file 'filter_schedule.php' for filtering
+        type: 'POST',
+        data: {
+            programId: programId
+        },
+        success: function(response) {
+            $('#tblschedule tbody').html(response);
+        }
+    });
+});
+</script>
 <div class="container-xxl position-relative bg-white d-flex p-0">
     <!-- Spinner Start -->
     <div id="spinner"
@@ -172,6 +183,33 @@ function deleteSchedule(id) {
                 <div class="col-12">
                     <div class="bg-light rounded h-100 p-4">
                         <h6 class="mb-4">SCHEDULE INFORMATION LISTS</h6>
+                        <div class="col-12 mb-3 d-flex">
+                            <span class="btn btn-primary m-1 ">Filter</span>
+                            <select id="Filter_Program m-1" name="Filter_Program" class="form-select">
+                                <option value="">Select Program</option>
+                                <?php
+                                                    $sql = "SELECT 
+                                                    tblprogram.ProgramID, 
+                                                    tblmajor.MajorEN, 
+                                                    tblsemester.SemesterEN, 
+                                                    tblyear.YearEN,
+                                                    tblshift.ShiftEN,
+                                                    tblbatch.BatchEN,
+                                                    tblcampus.CampusEN
+                                                            FROM tblprogram 
+                                                            INNER JOIN tblmajor ON tblprogram.MajorID = tblmajor.MajorID 
+                                                            INNER JOIN tblcampus ON tblprogram.CampusID = tblcampus.CampusID 
+                                                            INNER JOIN tblshift ON tblprogram.ShiftID = tblshift.ShiftID 
+                                                            INNER JOIN tblbatch ON tblprogram.BatchID = tblbatch.BatchID 
+                                                            INNER JOIN tblsemester ON tblprogram.SemesterID = tblsemester.SemesterID 
+                                                            INNER JOIN tblyear ON tblprogram.YearID = tblyear.YearID";
+                                                    $rs = $cn->query($sql);
+                                                    while ($row = $rs->fetch_assoc()) {
+                                                        echo '<option value="' . $row['ProgramID'] . '">' . $row['MajorEN'] . '/' . $row['YearEN'] . '/' . $row['SemesterEN'] . '/' . $row['ShiftEN'] . $row['SemesterEN'] . '/' . $row['BatchEN'] . $row['CampusEN'] .'</option>';
+                                                    }
+                                                        ?>
+                            </select>
+                        </div>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#exampleModal">
@@ -276,21 +314,21 @@ function deleteSchedule(id) {
                                                         aria-label="Default select example">
                                                         <option value="">Select Week</option>
                                                         <?php 
-                                $sql = "SELECT
-                                DayWeekID,
-                                tbldayweek.DayWeekName,
-                                tblshift.ShiftEN
-                                FROM tbldayweek
-                                INNER JOIN tblshift ON tbldayweek.ShiftID = tblshift.ShiftID";
-                                $rs = $cn->query($sql);
-                            while($row = $rs->fetch_assoc()){
-                                ?>
+                                                    $sql = "SELECT
+                                                    DayWeekID,
+                                                    tbldayweek.DayWeekName,
+                                                    tblshift.ShiftEN
+                                                    FROM tbldayweek
+                                                    INNER JOIN tblshift ON tbldayweek.ShiftID = tblshift.ShiftID";
+                                                    $rs = $cn->query($sql);
+                                                while($row = $rs->fetch_assoc()){
+                                                    ?>
                                                         <option value="<?php echo $row['DayWeekID']?> ">
                                                             <?php echo $row['DayWeekName'] ?>
                                                         </option>
                                                         <?php
-                            }
-                            ?>
+                                                }
+                                                ?>
 
                                                     </select>
                                                 </div>
@@ -300,21 +338,21 @@ function deleteSchedule(id) {
                                                         aria-label="Default select example">
                                                         <option value="">Select Time</option>
                                                         <?php 
-                                $sql = "SELECT
-                                tbltime.TimeID,
-                                tbltime.TimeName,
-                                tblshift.ShiftEN
-                                FROM tbltime
-                                INNER JOIN tblshift ON tbltime.ShiftID = tblshift.ShiftID";
-                                $rs = $cn->query($sql);
-                            while($row = $rs->fetch_assoc()){
-                                ?>
+                                                    $sql = "SELECT
+                                                    tbltime.TimeID,
+                                                    tbltime.TimeName,
+                                                    tblshift.ShiftEN
+                                                    FROM tbltime
+                                                    INNER JOIN tblshift ON tbltime.ShiftID = tblshift.ShiftID";
+                                                    $rs = $cn->query($sql);
+                                                while($row = $rs->fetch_assoc()){
+                                                    ?>
                                                         <option value="<?php echo $row['TimeID']?> ">
                                                             <?php echo $row['TimeName'] ?>
                                                         </option>
                                                         <?php
-                            }
-                            ?>
+                                                }
+                                                ?>
 
                                                     </select>
                                                 </div>
@@ -324,21 +362,21 @@ function deleteSchedule(id) {
                                                         aria-label="Default select example">
                                                         <option value="">Select Room</option>
                                                         <?php 
-                                $sql = "SELECT
-                                tblroom.RoomID,
-                                tblroom.RoomName,
-                                tblcampus.CampusEN
-                                FROM tblroom
-                                INNER JOIN tblcampus ON tblroom.CampusID = tblcampus.CampusID";
-                                $rs = $cn->query($sql);
-                            while($row = $rs->fetch_assoc()){
-                                ?>
+                                                    $sql = "SELECT
+                                                    tblroom.RoomID,
+                                                    tblroom.RoomName,
+                                                    tblcampus.CampusEN
+                                                    FROM tblroom
+                                                    INNER JOIN tblcampus ON tblroom.CampusID = tblcampus.CampusID";
+                                                    $rs = $cn->query($sql);
+                                                while($row = $rs->fetch_assoc()){
+                                                    ?>
                                                         <option value="<?php echo $row['RoomID']?> ">
                                                             <?php echo $row['RoomName']?>
                                                         </option>
                                                         <?php
-                            }
-                            ?>
+                                                }
+                                                ?>
 
                                                     </select>
                                                 </div>
@@ -373,10 +411,7 @@ function deleteSchedule(id) {
 
 
                         <div class="container mt-5">
-                            <label for="">Filter</label>
-                            <select name="Schedule" id="Schedule" class="form-select mb-3"
-                                aria-label="Default select example">
-                                <?php 
+                            <?php 
                             $sql = "SELECT
                             scd.ScheduleID,
                             scd.ProgramID,
@@ -400,29 +435,23 @@ function deleteSchedule(id) {
                             JOIN tblshift sh ON p.ShiftID = sh.ShiftID
                             JOIN tblroom r ON scd.RoomID = r.RoomID
                             JOIN tblmajor m ON p.MajorID = m.MajorID
-                            JOIN tbldegree d ON p.DegreeID = d.DegreeID
-                            ";
+                            JOIN tbldegree d ON p.DegreeID = d.DegreeID";
                             $rs = $cn->query($sql);
-                            while($row = $rs->fetch_assoc()){
-                                ?>
-                                <option>
-                                    <?php echo $row['MajorEN'] .'/'. $row['DegreeNameEN'] .'/'. $row['YearEN'] .'/'. $row['SemesterEN'] .'/'. $row['BatchEN'] .'/'. $row['AcademicYear']?>
-                                </option>
-                                <?php
-                                       }
-                                      ?>
-                            </select>
+                            $row = $rs->fetch_assoc();
+                            echo "<p>" . $row['MajorEN'] . '/' . $row['DegreeNameEN'] . '/' . $row['YearEN'] . '/' . $row['SemesterEN'] . '/' . $row['BatchEN'] . '/' . $row['AcademicYear'] . "</p>";
+
+                            ?>
                             <table class="table table-bordered text-center" id="tblschedule" style=" font-size: 13px;">
                                 <thead>
                                     <tr>
                                         <th>Time</th>
                                         <?php 
-                        $sql = "SELECT * FROM tbldayweek";
-                        $rs = $cn->query($sql);
-                        while($row = $rs->fetch_assoc()){
-                            echo "<th>{$row['DayWeekName']}</th>";
-                        }
-                        ?>
+                                $sql = "SELECT * FROM tbldayweek";
+                                $rs = $cn->query($sql);
+                                while($row = $rs->fetch_assoc()){
+                                    echo "<th>{$row['DayWeekName']}</th>";
+                                }
+                                ?>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -457,11 +486,14 @@ function deleteSchedule(id) {
                         ";
                         $rsSchedule = $cn->query($sqlSchedule);
                         $scheduleData = $rsSchedule->fetch_assoc();
-                                
                         if($scheduleData){
                             echo "<td data-subject-id='{$scheduleData['SubjectID']}' data-lecturer-id='{$scheduleData['LecturerID']}'>
                                     <p>{$scheduleData['SubjectEN']}<br/>{$scheduleData['LecturerName']}<br/>{$scheduleData['RoomName']}</p>
-             <p><a href='#' onclick='deleteSchedule({$scheduleData['ScheduleID']})'><i class='bi bi-trash'></i></a></p>
+                                    <p>
+                                        <a href='#'><i class='bi bi-pencil-fill' data-bs-toggle='modal'
+                            data-bs-target='#exampleModal' id='UpdateSchedule'></i></a>
+                                        <a href='#' onclick='deleteSchedule({$scheduleData['ScheduleID']})'><i class='bi bi-trash'></i></a>
+                                    </p>
                                   </td>";
                         } else {
                             echo "<td></td>";

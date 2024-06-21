@@ -24,13 +24,13 @@
                 <div class="dropdown-menu bg-transparent border-0">
                     <ul class="sidebar-nav">
                         <li class="nav-item">
-                            <a href="Studentinfor.php" class="dropdown-item">Register</a>
+                            <a href="Studentinfor.php" class="dropdown-item">Student-Register</a>
                         </li>
                         <li class="nav-item">
-                            <a href="Background_Study.php" class="dropdown-item">Education</a>
+                            <a href="Background_Study.php" class="dropdown-item">Student-Education</a>
                         </li>
                         <li class="nav-item">
-                            <a href="Familty_Student.php" class="dropdown-item">Family</a>
+                            <a href="Familty_Student.php" class="dropdown-item">Student-Family</a>
                         </li>
                     </ul>
                 </div>

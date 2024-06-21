@@ -330,7 +330,7 @@ function deleteStudent(id) {
                                                             data-bs-toggle="modal" data-bs-target="#studentModal"><i
                                                                 class="bi bi-pencil-fill"></i> Update</a></li>
                                                     <li><a type="button" class="dropdown-item" href="#"
-                                                            onclick="deleteStudent(<?php $row['StudentID'] ?>)"><i
+                                                            onclick="deleteStudent(<?php echo $row['StudentID'] ?>)"><i
                                                                 class="bi bi-trash-fill"></i> Delete</a></li>
                                                 </ul>
                                             </div>

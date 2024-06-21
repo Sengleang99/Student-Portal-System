@@ -204,6 +204,17 @@ function deleteSubject(id) {
                                                     <select id="show" name="Major" class="form-select mb-3"
                                                         aria-label="Default select example">
                                                         <option value="">Select Major</option>
+                                                        <?php 
+        
+                                                            $sql = "SELECT * FROM `tblmajor`";
+                                                            $rs = $cn->query($sql);
+                                                        while($row = $rs->fetch_assoc()){
+                                                            ?>
+                                                        <option value="<?php echo $row['MajorID'] ?>">
+                                                            <?php echo $row['MajorEN'] ?></option>
+                                                        <?php
+                                                        }
+                                                        ?>
                                                     </select>
                                                 </div>
                                             </div>
