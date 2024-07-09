@@ -1,14 +1,11 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<?php include("Header.php");?>
+<?php include_once ("Header.php") ?>
 <?php
     $cn= new mysqli("localhost","root","","student_portal_management");
+    
     session_start();
-
-
 // ------------- Family Background Student ---------------------
-
-
     function Add_Family(){
         global $cn;
         if(isset($_POST['Add_Family'])){
@@ -188,6 +185,11 @@
             $id = $_GET['Remove_Family'];
             $sql ="DELETE FROM `tblfamilybackground` WHERE FamilyBackgroundID=$id";
             $rs = $cn->query($sql);
+                if($rs){
+                echo "<script>
+                        Swal.fire('Successful!', 'Lecturer added successfully!', 'success');
+                      </script>";  
+            }
     }
 }
     Delete_Family();
@@ -369,8 +371,9 @@
 }
     Edit_Program();
 
-    function getView_Program() {
+    function getView_Program($page, $records_per_page = 10) {
     global $cn;
+    $offset = ($page - 1) * $records_per_page;
     $sql = "SELECT 
     tblprogram.ProgramID,tblprogram.StartDate, 
     tblprogram.EndDate,tblprogram.DateIssue,
@@ -391,7 +394,9 @@
     INNER JOIN tbldegree ON tblprogram.DegreeID = tbldegree.DegreeID
     INNER JOIN tblacademicyear ON tblprogram.AcademicYearID = tblacademicyear.AcademicYearID
     INNER JOIN tblbatch ON tblprogram.BatchID = tblbatch.BatchID
-    INNER JOIN tblcampus ON tblprogram.CampusID = tblcampus.CampusID"; 
+    INNER JOIN tblcampus ON tblprogram.CampusID = tblcampus.CampusID
+    LIMIT $offset, $records_per_page
+    "; 
     $rs = $cn->query($sql);
     if ($rs->num_rows>0) {
         while ($row = $rs->fetch_assoc()) {
@@ -417,8 +422,7 @@
                         <i class="bi bi-three-dots-vertical"></i>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="ViewDetail.php"><i class="bi bi-eye-fill"></i>
-                                View</a></li>
+                       
                         <li><a class="dropdown-item" id="EditProgram" href="#" data-bs-toggle="modal"
                         data-bs-target="#programModal"><i
                                     class="bi bi-pencil-fill"></i> Update</a></li>
@@ -431,6 +435,16 @@
             echo "</tr>";
         }
     }
+    }
+
+    function getTotalProgramPages($records_per_page = 10) {
+        global $cn;
+        $sql = "SELECT COUNT(*) AS total FROM tblprogram";
+        $result = $cn->query($sql);
+        $row = $result->fetch_assoc();
+        $total_records = $row['total'];
+    
+        return ceil($total_records / $records_per_page);
     }
 
     function Delete_Program(){
@@ -505,11 +519,12 @@ SignIn();
 
     function logout(){
     
-    if(isset($_POST['btn-logout'])){
-       unset($_SESSION['id']);
-       header("location:login.php");
+    if(isset($_POST['logout'])){
+       unset($_SESSION['SignupID ']);
+       header("location:signin.php");
     }
     }
+    logout();
 // ----------------- End section ---------------
 
     // -------------- Start Section Student ----------------
@@ -621,6 +636,8 @@ SignIn();
 
     // -------------- Start Section Subject ---------------->
     
+
+    
     function Insert_Subject(){
         global $cn;
         if(isset($_POST['Subject_Insert'])){
@@ -690,8 +707,9 @@ SignIn();
     }
     Deleted_Subject();
     
-    function GetView_Subject(){
+    function GetView_Subject($page, $records_per_page = 10){
         global $cn;
+        $offset = ($page - 1) * $records_per_page;
         $sql = "SELECT 
         tblsubject.SubjectID,
         tblsubject.SubjectKH,
@@ -708,7 +726,9 @@ SignIn();
             INNER JOIN tblfaculty ON tblsubject.FacultyID = tblfaculty.FacultyID
             INNER JOIN tblmajor ON tblsubject.MajorID = tblmajor.MajorID
             INNER JOIN tblsemester ON tblsubject.SemesterID = tblsemester.SemesterID
-            INNER JOIN tblyear ON tblsubject.YearID = tblyear.YearID";
+            INNER JOIN tblyear ON tblsubject.YearID = tblyear.YearID
+            LIMIT $offset, $records_per_page";
+            
              $rs = $cn->query($sql);
              if($rs){
                  while($row = $rs->fetch_assoc()){
@@ -745,6 +765,18 @@ SignIn();
                  }
              }
     }
+
+
+    function getTotalPages($records_per_page = 10) {
+        global $cn;
+        $sql = "SELECT COUNT(*) AS total FROM tblsubject";
+        $result = $cn->query($sql);
+        $row = $result->fetch_assoc();
+        $total_records = $row['total'];
+    
+        return ceil($total_records / $records_per_page);
+    }
+    
     // <--------------- End Section Subject -----------------
     // ------------ javascript ------------
     include("Library_Javascript.php");

@@ -1,5 +1,6 @@
 <?php include('Function.php') ?>
-<?php include("Header.php") ?>
+<?php 
+include("Header.php") ?>
 <div class="container-xxl position-relative bg-white d-flex p-0">
     <!-- Spinner Start -->
     <div id="spinner"
@@ -26,7 +27,17 @@
                         <i class="fas fa-user-graduate fa-3x text-primary"></i>
                         <div class="ms-3">
                             <p class="mb-2">Total Student</p>
-                            <h6 class="mb-0">120</h6>
+                            <h6 class="mb-0">
+                                <?php 
+                                $student_query = "SELECT * FROM tblstudentinfo";
+                                $student_rs = $cn->query($student_query);
+                                if($student_total = mysqli_num_rows($student_rs)){
+                                    echo "<p>$student_total</p>";
+                                }else{
+                                    echo '<p>No data</p>'; 
+                                }
+                                ?>
+                            </h6>
                         </div>
                     </div>
                 </div>
@@ -34,8 +45,18 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa fa-chart-bar fa-3x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Total Grade</p>
-                            <h6 class="mb-0">111</h6>
+                            <p class="mb-2">Total Faculty</p>
+                            <h6 class="mb-0">
+                                <?php 
+                                $faculty_query = "SELECT * FROM tblfaculty";
+                                $faculty_rs = $cn->query($faculty_query);
+                                if($faculty_total = mysqli_num_rows($faculty_rs)){
+                                    echo "<p>$faculty_total</p>";
+                                }else{
+                                    echo '<p>No data</p>'; 
+                                }
+                                ?>
+                            </h6>
                         </div>
                     </div>
                 </div>
@@ -43,20 +64,22 @@
                     <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                         <i class="fa fa-chart-area fa-3x text-primary"></i>
                         <div class="ms-3">
-                            <p class="mb-2">Today Faculty</p>
-                            <h6 class="mb-0">12</h6>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-xl-3">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
-                        <i class="fa fa-chart-pie fa-3x text-primary"></i>
-                        <div class="ms-3">
                             <p class="mb-2">Total Major</p>
-                            <h6 class="mb-0">42</h6>
+                            <h6 class="mb-0">
+                                <?php 
+                                $major_query = "SELECT * FROM tblmajor";
+                                $major_rs = $cn->query($major_query);
+                                if($major_total = mysqli_num_rows($major_rs)){
+                                    echo "<p>$major_total</p>";
+                                }else{
+                                    echo '<p>No data</p>'; 
+                                }
+                                ?>
+                            </h6>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <!-- Sale & Revenue End -->

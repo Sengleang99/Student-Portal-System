@@ -6,14 +6,14 @@
         </a>
         <div class="d-flex align-items-center ms-4 mb-4">
             <div class="position-relative">
-                <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                <!-- <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;"> -->
                 <div
                     class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1">
                 </div>
             </div>
             <div class="ms-3">
-                <h6 class="mb-0">Jhon Doe</h6>
-                <span>Admin</span>
+                <!-- <h6 class="mb-0">Jhon Doe</h6> -->
+                <h3>Admin</h3>
             </div>
         </div>
         <div class="navbar-nav w-100">
@@ -39,10 +39,16 @@
             <a href="Program.php" class="nav-item nav-link">
                 <i class="bi bi-file-text me-2"></i>Program
             </a>
-            <a href="Status.php" class="nav-item nav-link"><i class="bi bi-journal-check me-2"></i>Status</a>
+            <a href="Status.php" class="nav-item nav-link"><i class="bi bi-journal-check me-2"></i>Student Status</a>
             <a href="Schedule.php" class="nav-item nav-link"><i class="bi bi-calendar4-week me-2"></i>Schedule</a>
             <a href="Subject_Fail.php" class="nav-item nav-link"><i class="bi bi-arrow-down-circle me-2"></i>Fall
                 Subject</a>
+            <form method="post" enctype="multipart/form-data">
+                <button type="submit" name="logout" class="btn btn-link p-0">
+                    <i class="bi bi-box-arrow-left me-2"></i>
+                    Logout
+                </button>
+            </form>
         </div>
     </nav>
 </div>

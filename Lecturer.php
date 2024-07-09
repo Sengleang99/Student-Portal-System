@@ -2,6 +2,7 @@
 <?php include("Header.php"); ?>
 <script>
 $(document).ready(function() {
+
     $('#tbllecturer').on('click', '#EditLecturer', function() {
         $('#Edit_Lecturer').show();
         $('#Add_Lecture').hide();
@@ -18,6 +19,7 @@ $(document).ready(function() {
         $('#id').val('');
         $('#Lecturer').val('');
     });
+
     $('#Searching').on('keyup', function() {
         var value = $(this).val().toLowerCase();
         $('#Table_Lecturer tr').filter(function() {
@@ -25,6 +27,10 @@ $(document).ready(function() {
         });
     });
 });
+
+
+
+
 
 function deleteLecturer(id) {
     Swal.fire({
@@ -42,7 +48,11 @@ function deleteLecturer(id) {
     })
 }
 </script>
+
+
 <?php
+
+
     if(isset($_POST['Add_Lecturer'])){
         $Lecturer = $_POST['Lecturer'];
         $sql = "INSERT INTO `tbllecturer`(`LecturerName`) VALUES ('$Lecturer')";
@@ -60,7 +70,6 @@ function deleteLecturer(id) {
         }
         
     }
-
     if(isset($_POST['Edit_Lecturer'])){
         $id = $_POST['id'];
         $Lecturer = $_POST['Lecturer'];
@@ -78,7 +87,6 @@ function deleteLecturer(id) {
                   </script>";
         }
     }
-
     if(isset($_GET['Remove_Lecturer'])){
         $id = $_GET['Remove_Lecturer'];
         $sql ="DELETE FROM `tbllecturer` WHERE LecturerID=$id";
@@ -95,6 +103,12 @@ function deleteLecturer(id) {
                   </script>";
         }
     }
+
+
+
+
+
+    
 ?>
 
 <div class="container-xxl position-relative bg-white d-flex p-0">

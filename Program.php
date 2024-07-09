@@ -1,5 +1,14 @@
 <?php include("Function.php") ?>
 <?php include("Header.php") ?>
+<?php 
+$records_per_page = 10; // Define the number of records per page
+$current_page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$current_page = max(1, $current_page); // Ensure the current page is at least 1
+
+$total_pages = getTotalProgramPages($records_per_page);
+$current_page = min($total_pages, $current_page); // Ensure the current page does not exceed the total pages
+?>
+
 <script>
 $(document).ready(function() {
     $('#tblprogram').on('click', '#EditProgram', function() {
@@ -102,6 +111,8 @@ function deleteProgram(id) {
                         <div class="m-n2">
                             <button type="button" id="Create_Program" class="btn btn-primary m-3" data-bs-toggle="modal"
                                 data-bs-target="#programModal">Create New</button>
+                            <button type="button" id="ExportToExcel" class="btn btn-success m-3"
+                                onclick="window.location.href='export_program.php'">Export to Excel</button>
                         </div>
                         <div class="modal fade" id="programModal" tabindex="-1">
                             <div class="modal-dialog modal-lg">
@@ -296,29 +307,34 @@ function deleteProgram(id) {
                                     </tr>
                                 </thead>
                                 <tbody id="Table_Program">
-                                    <?php getView_Program(); ?>
+                                    <?php getView_Program($current_page, $records_per_page); ?>
                                 </tbody>
                             </table>
                         </div>
                         <!-- ---------- pagination ------------------ -->
-                        <section class=" float-end">
+                        <section class="float-end">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination">
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Previous">
+                                    <li class="page-item <?php if ($current_page <= 1) echo 'disabled'; ?>">
+                                        <a class="page-link" href="?page=<?php echo max(1, $current_page - 1); ?>"
+                                            aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Next">
+                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                    <li class="page-item <?php if ($i == $current_page) echo 'active'; ?>">
+                                        <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                    </li>
+                                    <?php endfor; ?>
+                                    <li class="page-item <?php if ($current_page >= $total_pages) echo 'disabled'; ?>">
+                                        <a class="page-link"
+                                            href="?page=<?php echo min($total_pages, $current_page + 1); ?>"
+                                            aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
                                 </ul>
-                            </nav><!-- End Pagination with icons -->
+                            </nav>
                         </section>
 
                     </div>

@@ -1,5 +1,7 @@
 <?php include("Header.php") ?>
-<?php include("Function.php") ?>
+<?php 
+include("Function.php") ?>
+
 <div class="container-xxl position-relative bg-white d-flex p-0">
     <!-- Spinner Start -->
     <div id="spinner"
@@ -26,7 +28,7 @@
                         <div class="form-floating mb-3">
                             <input type="text" name="Name_Email" class="form-control" id="floatingInput"
                                 placeholder="Username or Email">
-                            <label for="floatingInput">Email address</label>
+                            <label for="floatingInput">Username or Email</label>
                         </div>
                         <div class="form-floating mb-4">
                             <input type="password" name="Password" class="form-control" id="floatingPassword"

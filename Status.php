@@ -3,28 +3,21 @@
 <?php 
      if (isset($_POST['Add_Status'])) {
         $Program = $_POST['Program'];
-        $AssignDate = $_POST['AssignDate'];
         $Note = $_POST['Note'];
-    
-        // Check if students are selected
-        if (isset($_POST['assigned']) && is_array($_POST['assigned'])) {
+        if (isset($_POST['assigned'])) {
             $assignedStudents = $_POST['assigned'];
-    
             foreach ($assignedStudents as $Student) {
-                $sql = "INSERT INTO tblstudentstatus (StudentID, ProgramID, Note, AssignDate) 
-                        VALUES ('$Student', '$Program', '$Note', '$AssignDate')";
+                $sql = "INSERT INTO tblstudentstatus (StudentID, ProgramID, Note) 
+                        VALUES ('$Student', '$Program', '$Note')";
                 $rs = $cn->query($sql);
                 
                 if (!$rs) {
-                    // Show error if insertion fails for any student
                     echo "<script>
                             Swal.fire('Error!', 'Failed to add student ID: $Student.', 'error');
                           </script>";
                     break; // Exit the loop on first error
                 }
             }
-    
-            // Show success message if all insertions are successful
             if ($rs) {
                 echo "<script>
                         Swal.fire('Successful!', 'Students added successfully!', 'success');
@@ -49,7 +42,26 @@
             $id = $_GET['Remove_Status'];
             $sql ="DELETE FROM `tblstudentstatus` WHERE StudentStatusID=$id";
             $rs = $cn->query($sql);
+            if ($rs) {
+                echo "<script>
+                        Swal.fire('Successful!', 'Students delete successfully!', 'success');
+                      </script>";
+            }
         }
+
+
+        $recordsPerPage = 5; // Define how many records you want per page
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $offset = ($currentPage - 1) * $recordsPerPage;
+    
+        // Count total records
+        $totalRecordsSql = "SELECT COUNT(*) AS total FROM tblstudentstatus";
+        $totalRecordsResult = $cn->query($totalRecordsSql);
+        $totalRecords = $totalRecordsResult->fetch_assoc()['total'];
+    
+        // Calculate total pages
+        $totalPages = ceil($totalRecords / $recordsPerPage);
+    ?>
 ?>
 <script>
 function deleteStatus(id) {
@@ -125,11 +137,7 @@ function deleteStatus(id) {
                                         ?>
                                     </select>
                                 </div>
-                                <div class="col-6">
-                                    <label for="AssignDate">Assign date</label>
-                                    <input type="date" name="AssignDate" id="AssignDate" class="form-control">
-                                </div>
-                                <div class="col-6">
+                                <div class="col-12">
                                     <label for="Note">Note</label>
                                     <input type="text" name="Note" id="Note" class="form-control">
                                 </div>
@@ -143,7 +151,7 @@ function deleteStatus(id) {
                         <div class="bg-light rounded p-4">
                             <h6 class="mb-4">AVAILABLE STUDENTS</h6>
                             <div class="table-responsive">
-                                <table class="table">
+                                <table class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th scope="col">Id</th>
@@ -182,7 +190,9 @@ function deleteStatus(id) {
             <div class="bg-light rounded p-4">
                 <h6 class="mb-4">STUDENTS CURRENT PROGRAMS</h6>
                 <div class="table-responsive">
-                    <table class="table" id="tblstatus">
+                    <button type="button" id="ExportToExcel" class="btn btn-success m-3"
+                        onclick="window.location.href='export_student_program.php'">Export to Excel</button>
+                    <table class="table table-bordered" id="tblstatus">
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -200,18 +210,26 @@ function deleteStatus(id) {
                                     st.NameInLatin,
                                     stt.Assigned,
                                     p.ProgramID,
-                                    m.MajorEN
+                                    m.MajorEN,
+                                    sh.ShiftEN,
+                                    b.BatchEN,
+                                    ac.AcademicYear
                                     FROM tblstudentstatus stt 
                                     JOIN tblprogram p ON stt.ProgramID = p.ProgramID
                                     JOIN tblstudentinfo st ON stt.StudentID = st.StudentID
-                                    JOIN tblmajor m ON p.MajorID = m.MajorID";
+                                    JOIN tblmajor m ON p.MajorID = m.MajorID
+                                    JOIN tblshift sh ON p.ShiftID = sh.ShiftID
+                                    JOIN tblbatch b ON p.BatchID = b.BatchID
+                                    JOIN tblacademicyear ac ON p.AcademicYearID = ac.AcademicYearID
+                                    ORDER BY stt.StudentStatusID DESC 
+                                    LIMIT $recordsPerPage OFFSET $offset";
                                 $rs = $cn->query($sql);
                                 if ($rs->num_rows>0) {
                                     while ($row = $rs->fetch_assoc()) {
                                         echo "<tr>";
                                         echo "<td>{$row['StudentStatusID']}</td>";
-                                        echo "<td>{$row['NameInLatin']} </td>";
-                                        echo "<td>{$row['MajorEN']} </td>";
+                                        echo "<td>{$row['NameInLatin']}</td>";
+                                        echo "<td>{$row['MajorEN']}<br/>{$row['ShiftEN']}/{$row['BatchEN']}/{$row['AcademicYear']}</td>";
                                         echo "<td>"; 
                                         if ($row['Assigned'] == 1) {
                                             echo "<p><a class='btn btn-success' href='Status.php?StudentStatusID=" . $row['StudentStatusID'] . "&Assigned=0'>Active</a></p> ";
@@ -232,24 +250,31 @@ function deleteStatus(id) {
                             ?>
                         </tbody>
                     </table>
-                    <section class=" float-end">
+                    <section class="float-end">
                         <nav aria-label="Page navigation example">
                             <ul class="pagination">
+                                <?php if ($currentPage > 1): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Previous">
+                                    <a class="page-link" href="?page=<?php echo $currentPage - 1; ?>"
+                                        aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
-                                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <?php endif; ?>
+                                <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <li class="page-item <?php if ($i == $currentPage) echo 'active'; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                                <?php endfor; ?>
+                                <?php if ($currentPage < $totalPages): ?>
                                 <li class="page-item">
-                                    <a class="page-link" href="#" aria-label="Next">
+                                    <a class="page-link" href="?page=<?php echo $currentPage + 1; ?>" aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
+                                <?php endif; ?>
                             </ul>
-                        </nav><!-- End Pagination with icons -->
+                        </nav>
                     </section>
                 </div>
 

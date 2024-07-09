@@ -62,7 +62,6 @@ $(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
-
 });
 
 function deleteStudent(id) {
@@ -106,6 +105,8 @@ function deleteStudent(id) {
                         <div class="m-n2">
                             <button type="button" id="CreateNew" class="btn btn-primary m-3" data-bs-toggle="modal"
                                 data-bs-target="#studentModal">Create New</button>
+                            <!-- <button type="button" id="ExportToExcel" class="btn btn-success m-3"
+                                onclick="window.location.href='export_as_excel.php'">Export to Excel</button> -->
                         </div>
                         <div class="modal fade" id="studentModal" tabindex="-1">
                             <div class="modal-dialog modal-lg">
@@ -252,7 +253,7 @@ function deleteStudent(id) {
                             </div>
                         </div><!-- End Large Modal-->
                         <div class="table-responsive">
-                            <table class="table" id="tblstudents">
+                            <table class="table table-bordered" id="tblstudents">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
@@ -274,7 +275,13 @@ function deleteStudent(id) {
                                 </thead>
                                 <tbody id="Tble_Student">
                                     <?php
-                                          global $cn;
+                                      $records_per_page = 10;
+
+                                      // Get the current page from URL, if not set default to 1
+                                      $current_page = isset($_GET['page']) ? $_GET['page'] : 1;              
+                                      // Calculate the starting record
+                                      $start_from = ($current_page - 1) * $records_per_page; 
+                                         
                                           $sql = "SELECT 
                                           tblstudentinfo.StudentID,
                                           tblstudentinfo.NameInLatin,
@@ -289,11 +296,14 @@ function deleteStudent(id) {
                                           tblsex.SexID,tblstudentinfo.RegisterDate,
                                           tblstudentinfo.Photo,tblcountry.CountryID,
                                           tblnationality.NationalityID
-                                          FROM tblstudentinfo
+                                          FROM tblstudentinfo 
                                               INNER JOIN tblsex ON tblstudentinfo.SexID = tblsex.SexID
                                               INNER JOIN tblcountry ON tblstudentinfo.CountryID = tblcountry.CountryID
-                                              INNER JOIN tblnationality ON tblstudentinfo.NationalityID = tblnationality.NationalityID";
+                                              INNER JOIN tblnationality ON tblstudentinfo.NationalityID = tblnationality.NationalityID
+                                              ORDER BY tblstudentinfo.StudentID DESC 
+                                              LIMIT $start_from, $records_per_page";
                                               $rs = $cn->query($sql);
+                                              
                                               if($rs){
                                                   while($row = $rs->fetch_assoc()){
                                                       $id = $row['StudentID'];
@@ -348,21 +358,45 @@ function deleteStudent(id) {
                         <section class=" float-end">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination">
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Previous">
+                                    <?php 
+                                    // Get the total number of records
+                                        $total_sql = "SELECT COUNT(*) FROM tblstudentinfo";
+                                        $total_result = $cn->query($total_sql);
+                                        $total_records = $total_result->fetch_row()[0];
+                                        $total_pages = ceil($total_records / $records_per_page);
+
+                                    ?>
+                                    <!-- Previous Page Link -->
+                                    <li class="page-item<?php if($current_page <= 1) echo ' disabled'; ?>">
+                                        <a class="page-link" href="?page=<?php echo max(1, $current_page - 1); ?>"
+                                            aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Next">
+                                    <?php
+                                        $max_pages_to_show = 5;
+                                        $start_page = max(1, $current_page - floor($max_pages_to_show / 2));
+                                        $end_page = min($total_pages, $current_page + floor($max_pages_to_show / 2));
+                                        if (($end_page - $start_page + 1) < $max_pages_to_show) {
+                                        $start_page = max(1, $end_page - $max_pages_to_show + 1);
+                                        }
+                                        for ($i = $start_page; $i <= $end_page; $i++) {
+                                            echo '<li class="page-item' . ($i == $current_page ? ' active' : '') . '">';
+                                            echo '<a class="page-link" href="?page=' . $i . '">' . $i . '</a>';
+                                            echo '</li>';
+                                            }
+                                        ?>
+                                    <!-- Next Page Link -->
+                                    <li class="page-item<?php if($current_page >= $total_pages) echo ' disabled'; ?>">
+                                        <a class="page-link"
+                                            href="?page=<?php echo min($total_pages, $current_page + 1); ?>"
+                                            aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
                                 </ul>
-                            </nav><!-- End Pagination with icons -->
+                            </nav>
+
                         </section>
 
                     </div>

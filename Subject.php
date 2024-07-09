@@ -1,13 +1,24 @@
 <?php include('Function.php') ?>
 <?php include("Header.php") ?>
+<?php
+    $records_per_page = 10; // Define how many records per page
+    $current_page = isset($_GET['page']) ? $_GET['page'] : 1;
+    
+    $total_pages = getTotalPages($records_per_page);
+?>
+
 
 <script>
 $(document).ready(function() {
+
+
+
+
     $('#Faculty').change(function() {
         var FacultyID = $('#Faculty').val();
         $.ajax({
             type: 'POST',
-            url: 'FetchData.php',
+            url: 'fetch_data.php',
             data: {
                 id: FacultyID
             },
@@ -16,6 +27,9 @@ $(document).ready(function() {
             }
         });
     });
+
+
+
     $('#tblsubject').on('click', '#UpdateSubject', function() {
         $('#Sub_SaveChange').show();
         $('#Subject_Insert').hide();
@@ -204,17 +218,6 @@ function deleteSubject(id) {
                                                     <select id="show" name="Major" class="form-select mb-3"
                                                         aria-label="Default select example">
                                                         <option value="">Select Major</option>
-                                                        <?php 
-        
-                                                            $sql = "SELECT * FROM `tblmajor`";
-                                                            $rs = $cn->query($sql);
-                                                        while($row = $rs->fetch_assoc()){
-                                                            ?>
-                                                        <option value="<?php echo $row['MajorID'] ?>">
-                                                            <?php echo $row['MajorEN'] ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -233,7 +236,7 @@ function deleteSubject(id) {
                             </div>
                         </div><!-- End Large Modal-->
                         <div class="table-responsive">
-                            <table class="table" id="tblsubject">
+                            <table class="table table-bordered" id="tblsubject">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
@@ -248,29 +251,33 @@ function deleteSubject(id) {
                                     </tr>
                                 </thead>
                                 <tbody id="Table_Subject">
-                                    <?php GetView_Subject(); ?>
+                                    <?php GetView_Subject ($current_page,$records_per_page); ?>
                                 </tbody>
                             </table>
                         </div>
                         <!-- ---------- pagination ------------------ -->
-                        <section class=" float-end">
+                        <section class="float-end">
                             <nav aria-label="Page navigation example">
                                 <ul class="pagination">
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Previous">
+                                    <li class="page-item <?php if ($current_page <= 1) echo 'disabled'; ?>">
+                                        <a class="page-link" href="?page=<?php echo $current_page - 1; ?>"
+                                            aria-label="Previous">
                                             <span aria-hidden="true">&laquo;</span>
                                         </a>
                                     </li>
-                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="#" aria-label="Next">
+                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                    <li class="page-item <?php if ($i == $current_page) echo 'active'; ?>">
+                                        <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                    </li>
+                                    <?php endfor; ?>
+                                    <li class="page-item <?php if ($current_page >= $total_pages) echo 'disabled'; ?>">
+                                        <a class="page-link" href="?page=<?php echo $current_page + 1; ?>"
+                                            aria-label="Next">
                                             <span aria-hidden="true">&raquo;</span>
                                         </a>
                                     </li>
                                 </ul>
-                            </nav><!-- End Pagination with icons -->
+                            </nav>
                         </section>
                     </div>
                 </div>
